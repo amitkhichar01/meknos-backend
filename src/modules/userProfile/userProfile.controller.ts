@@ -3,6 +3,7 @@ import UserProfile from "./userProfile.model.ts";
 import generateUsername from "#src/utils/generateUsername.ts";
 import sendResponse from "#src/utils/sendResponse.ts";
 import { createUserProfileSchema, updateUserProfileSchema } from "./userProfile.validation.ts";
+import { generateProfileMarkdown, generateSuggestedQuestions } from "#src/modules/ai/ai.service.ts";
 
 export const createProfile = async (req: Request, res: Response) => {
   if (!req.user) {
@@ -21,6 +22,17 @@ export const createProfile = async (req: Request, res: Response) => {
   const existingProfile = await UserProfile.findOne({ userId: req.user._id });
   if (existingProfile) {
     return sendResponse(res, 409, {}, "User profile already exists");
+  }
+
+  // Generate Markdown profile content from raw user text via AI service
+  const markdownContent = await generateProfileMarkdown(content);
+
+  // If frontend passed non-empty suggestedQuestions, use them; otherwise generate via AI
+  let finalQuestions: string[] = [];
+  if (suggestedQuestions && suggestedQuestions.length > 0) {
+    finalQuestions = suggestedQuestions;
+  } else {
+    finalQuestions = await generateSuggestedQuestions(markdownContent);
   }
 
   // Generate unique username
@@ -48,8 +60,8 @@ export const createProfile = async (req: Request, res: Response) => {
   const profile = await UserProfile.create({
     userId: req.user._id,
     username,
-    content,
-    suggestedQuestions,
+    content: markdownContent,
+    suggestedQuestions: finalQuestions,
     isPublished,
   });
 
@@ -110,12 +122,21 @@ export const updateProfile = async (req: Request, res: Response) => {
 
   const { content, suggestedQuestions, isPublished } = validation.data;
 
+  // If content changed, re-generate Markdown via AI
   if (content !== undefined) {
-    profile.content = content;
-  }
-  if (suggestedQuestions !== undefined) {
+    const markdownContent = await generateProfileMarkdown(content);
+    profile.content = markdownContent;
+
+    // If frontend explicitly provided non-empty suggestedQuestions, use them; otherwise re-generate with AI
+    if (suggestedQuestions && suggestedQuestions.length > 0) {
+      profile.suggestedQuestions = suggestedQuestions;
+    } else {
+      profile.suggestedQuestions = await generateSuggestedQuestions(markdownContent);
+    }
+  } else if (suggestedQuestions !== undefined) {
     profile.suggestedQuestions = suggestedQuestions;
   }
+
   if (isPublished !== undefined) {
     profile.isPublished = isPublished;
   }
