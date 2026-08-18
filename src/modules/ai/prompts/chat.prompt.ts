@@ -1,3 +1,5 @@
+import type { ChatHistoryMessage } from "../ai.types.ts";
+
 export const CHAT_SYSTEM_PROMPT = `
 You are an intelligent virtual assistant representing the profile owner on Meknos.
 Your task is to answer questions asked by visitors about the profile owner based STRICTLY on the provided Markdown profile.
@@ -12,16 +14,32 @@ CRITICAL INSTRUCTIONS:
    - Be helpful, polite, objective, and professional.
    - Keep answers clear, accurate, and concise.
 
-3. CONTEXT PROVIDED:
-   - You will be given the full Markdown profile of the user and the visitor's question.
+3. CONTEXT & CONVERSATION HISTORY:
+   - You are provided with the full Markdown profile of the user and recent conversation history.
+   - Use the conversation history for context when answering follow-up questions.
 `.trim();
 
-export const buildChatUserPrompt = (markdownProfile: string, question: string): string => {
+export const buildChatUserPrompt = (
+  markdownProfile: string,
+  question: string,
+  history?: ChatHistoryMessage[]
+): string => {
+  let historySection = "";
+  if (history && history.length > 0) {
+    const formattedHistory = history
+      .map(
+        (msg) =>
+          `${msg.role === "USER" || msg.role === "user" ? "Visitor" : "Assistant"}: ${msg.content}`
+      )
+      .join("\n");
+    historySection = `\n\nRECENT CONVERSATION HISTORY:\n${formattedHistory}`;
+  }
+
   return `PROFILE CONTEXT:
 ---
 ${markdownProfile}
----
+---${historySection}
 
-VISITOR QUESTION:
+CURRENT VISITOR QUESTION:
 ${question}`;
 };

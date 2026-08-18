@@ -17,3 +17,14 @@ export interface GenerateTextResult {
   model: string;
   usage: AIUsage;
 }
+
+export interface ChatHistoryMessage {
+  role: string;
+  content: string;
+}
+
+export interface GenerateChatOptions {
+  markdownProfile: string;
+  question: string;
+  history?: ChatHistoryMessage[];
+}

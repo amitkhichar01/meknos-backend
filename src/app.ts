@@ -7,6 +7,7 @@ import sendResponse from "#src/utils/sendResponse.ts";
 import authRoutes from "#src/modules/auth/auth.routes.ts";
 import userRoutes from "./modules/users/user.routes.ts";
 import userProfileRoutes from "./modules/userProfile/userProfile.routes.ts";
+import chatRoutes from "./modules/chat/chat.routes.ts";
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use("/health", (_req: Request, res: Response) => {
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/user-profiles", userProfileRoutes);
+app.use("/public/profiles", chatRoutes);
 
 
 

@@ -6,6 +6,7 @@ import {
 } from "./prompts/suggestions.prompt.ts";
 import { CHAT_SYSTEM_PROMPT, buildChatUserPrompt } from "./prompts/chat.prompt.ts";
 import { DEFAULT_TEMPERATURE, DEFAULT_MAX_TOKENS } from "./ai.constants.ts";
+import type { GenerateTextResult, ChatHistoryMessage, GenerateChatOptions } from "./ai.types.ts";
 
 /**
  * Sanitizes markdown string by stripping code fence blocks if returned by the LLM.
@@ -83,12 +84,13 @@ export const generateSuggestedQuestions = async (markdownProfile: string): Promi
 };
 
 /**
- * Answers a visitor's question
+ * Answers a visitor's question using the complete Markdown profile as context and recent history.
  */
-export const generateChatResponse = async (
-  markdownProfile: string,
-  question: string
-): Promise<string> => {
+export const generateChatResponse = async ({
+  markdownProfile,
+  question,
+  history,
+}: GenerateChatOptions): Promise<GenerateTextResult> => {
   if (!markdownProfile || !markdownProfile.trim()) {
     throw new Error("Markdown profile context is required for chat responses.");
   }
@@ -99,10 +101,10 @@ export const generateChatResponse = async (
   const provider = getAIProvider();
   const result = await provider.generateText({
     system: CHAT_SYSTEM_PROMPT,
-    prompt: buildChatUserPrompt(markdownProfile, question),
+    prompt: buildChatUserPrompt(markdownProfile, question, history),
     temperature: DEFAULT_TEMPERATURE.CHAT,
     maxOutputTokens: DEFAULT_MAX_TOKENS.CHAT,
   });
 
-  return result.text.trim();
+  return result;
 };
