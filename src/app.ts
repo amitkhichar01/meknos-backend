@@ -38,7 +38,7 @@ app.use("/health", (_req: Request, res: Response) => {
 
 // auth routes
 app.use("/auth", authRoutes);
-app.use("/users", userRoutes);
+// app.use("/users", userRoutes);
 app.use("/user-profiles", userProfileRoutes);
 app.use("/public/profiles", chatRoutes);
 

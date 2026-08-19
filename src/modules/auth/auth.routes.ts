@@ -1,9 +1,11 @@
 import { Router } from "express";
-import { googleLogin, logout } from "./auth.controller.ts";
+import { googleLogin, logout, getMe } from "./auth.controller.ts";
+import authenticate from "#src/middlewares/authenticate.middleware.ts";
 
 const router = Router();
 
 router.post("/login/google", googleLogin);
+router.get("/me", authenticate, getMe);
 router.post("/logout", logout);
 
 export default router;

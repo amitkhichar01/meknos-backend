@@ -2,7 +2,7 @@
   "name": "meknos",
   "version": "0.1.0",
   "description": "",
-  "main": "server.ts",
+  "main": "./src/server.ts",
   "imports": {
     "#src/*": "./src/*"
   },

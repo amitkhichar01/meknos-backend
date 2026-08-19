@@ -7,7 +7,7 @@ export const getAIProvider = (): AIProvider => {
 
   switch (provider) {
     case "gemini": {
-      const model = aiConfig.model || aiConfig.nanoModel;
+      const model = aiConfig.nanoModel;
       return new GeminiProvider(model);
     }
 

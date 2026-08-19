@@ -80,3 +80,7 @@ export const logout = async (req: Request, res: Response) => {
   });
   return sendResponse(res, 200, {}, "Logout successful");
 };
+
+export const getMe = async (req: Request, res: Response) => {
+  return sendResponse(res, 200, { data: req.user }, "User fetched successfully");
+};
