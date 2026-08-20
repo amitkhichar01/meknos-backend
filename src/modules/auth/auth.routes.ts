@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { googleLogin, logout, getMe } from "./auth.controller.ts";
-import authenticate from "#src/middlewares/authenticate.middleware.ts";
+import authenticate from "../../middlewares/authenticate.middleware.ts";
 
 const router = Router();
 

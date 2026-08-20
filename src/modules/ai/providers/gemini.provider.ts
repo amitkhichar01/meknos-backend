@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { env } from "#src/config/env.config.ts";
+import { env } from "../../../config/env.config.ts";
 import type { AIProvider } from "./ai-provider.interface.ts";
 import type { GenerateTextOptions, GenerateTextResult, AIUsage } from "../ai.types.ts";
 
@@ -28,9 +28,18 @@ export class GeminiProvider implements AIProvider {
         const text = interaction.output_text || "";
 
         const usage: AIUsage = {
-          inputTokens: (interaction as any).usage?.input_tokens ?? (interaction as any).usage?.inputTokens ?? 0,
-          outputTokens: (interaction as any).usage?.output_tokens ?? (interaction as any).usage?.outputTokens ?? 0,
-          totalTokens: (interaction as any).usage?.total_tokens ?? (interaction as any).usage?.totalTokens ?? 0,
+          inputTokens:
+            (interaction as any).usage?.input_tokens ??
+            (interaction as any).usage?.inputTokens ??
+            0,
+          outputTokens:
+            (interaction as any).usage?.output_tokens ??
+            (interaction as any).usage?.outputTokens ??
+            0,
+          totalTokens:
+            (interaction as any).usage?.total_tokens ??
+            (interaction as any).usage?.totalTokens ??
+            0,
         };
 
         return {
@@ -47,7 +56,9 @@ export class GeminiProvider implements AIProvider {
           config: {
             ...(options.system ? { systemInstruction: options.system } : {}),
             ...(options.temperature !== undefined ? { temperature: options.temperature } : {}),
-            ...(options.maxOutputTokens !== undefined ? { maxOutputTokens: options.maxOutputTokens } : {}),
+            ...(options.maxOutputTokens !== undefined
+              ? { maxOutputTokens: options.maxOutputTokens }
+              : {}),
           },
         });
 

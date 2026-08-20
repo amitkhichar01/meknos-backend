@@ -1,7 +1,7 @@
-import UserProfile from "#src/modules/userProfile/userProfile.model.ts";
+import UserProfile from "../../modules/userProfile/userProfile.model.ts";
 import ChatSession from "./chatSession.model.ts";
 import ChatMessage from "./chatMessage.model.ts";
-import { generateChatResponse } from "#src/modules/ai/ai.service.ts";
+import { generateChatResponse } from "../../modules/ai/ai.service.ts";
 import type { IChatHistoryResponse, ISendMessageResponseData } from "./chat.types.ts";
 
 const SESSION_INACTIVITY_LIMIT_MS = 24 * 60 * 60 * 1000; // 24 hours

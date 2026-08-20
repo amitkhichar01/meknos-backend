@@ -5,7 +5,7 @@ import {
   getPublicProfile,
   updateProfile,
 } from "./userProfile.controller.ts";
-import authenticate from "#src/middlewares/authenticate.middleware.ts";
+import authenticate from "../../middlewares/authenticate.middleware.ts";
 
 const router = Router();
 

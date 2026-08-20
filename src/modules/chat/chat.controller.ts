@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import sendResponse from "#src/utils/sendResponse.ts";
+import sendResponse from "../../utils/sendResponse.ts";
 import { sendMessageSchema } from "./chat.validation.ts";
 import { sendMessageToProfileService, getChatHistoryService } from "./chat.service.ts";
 

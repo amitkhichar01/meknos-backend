@@ -1,7 +1,7 @@
-import "#src/config/env.config.ts";
-import app from "#src/app.ts";
-import connectDB from "#src/config/db.config.ts";
-import { env } from "#src/config/env.config.ts";
+import "./config/env.config.ts";
+import app from "./app.ts";
+import connectDB from "./config/db.config.ts";
+import { env } from "./config/env.config.ts";
 
 const PORT = env.PORT;
 

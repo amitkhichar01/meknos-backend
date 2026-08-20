@@ -1,9 +1,9 @@
 import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import User from "#src/modules/users/user.model.ts";
-import sendResponse from "#src/utils/sendResponse.ts";
+import User from "../../modules/users/user.model.ts";
+import sendResponse from "../../utils/sendResponse.ts";
 import { verifyGoogleIdToken } from "./auth.service.ts";
-import { env } from "#src/config/env.config.ts";
+import { env } from "../../config/env.config.ts";
 
 const JWT_SECRET_KEY = env.JWT_SECRET_KEY;
 const JWT_EXPIRES_IN = env.JWT_EXPIRES_IN as `${number}${"s" | "m" | "h" | "d" | "w" | "y"}`;

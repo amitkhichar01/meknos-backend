@@ -1,4 +1,4 @@
-import { aiConfig } from "#src/config/ai.config.ts";
+import { aiConfig } from "../../../config/ai.config.ts";
 import type { AIProvider } from "../providers/ai-provider.interface.ts";
 import { GeminiProvider } from "../providers/gemini.provider.ts";
 

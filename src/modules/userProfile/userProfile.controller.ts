@@ -1,9 +1,12 @@
 import type { Request, Response } from "express";
 import UserProfile from "./userProfile.model.ts";
-import generateUsername from "#src/utils/generateUsername.ts";
-import sendResponse from "#src/utils/sendResponse.ts";
+import generateUsername from "../../utils/generateUsername.ts";
+import sendResponse from "../../utils/sendResponse.ts";
 import { createUserProfileSchema, updateUserProfileSchema } from "./userProfile.validation.ts";
-import { generateProfileMarkdown, generateSuggestedQuestions } from "#src/modules/ai/ai.service.ts";
+import {
+  generateProfileMarkdown,
+  generateSuggestedQuestions,
+} from "../../modules/ai/ai.service.ts";
 
 export const createProfile = async (req: Request, res: Response) => {
   if (!req.user) {

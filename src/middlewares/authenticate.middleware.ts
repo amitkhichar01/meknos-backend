@@ -1,10 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import User from "#src/modules/users/user.model.ts";
-import sendResponse from "#src/utils/sendResponse.ts";
-import type { JwtPayload } from "#src/modules/auth/auth.types.ts";
-import { env } from "#src/config/env.config.ts";
-
+import User from "../modules/users/user.model.ts";
+import sendResponse from "../utils/sendResponse.ts";
+import type { JwtPayload } from "../modules/auth/auth.types.ts";
+import { env } from "../config/env.config.ts";
 
 const authenticate = async (req: Request, res: Response, next: NextFunction) => {
   try {

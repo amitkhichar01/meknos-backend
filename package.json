@@ -2,10 +2,7 @@
   "name": "meknos",
   "version": "0.1.0",
   "description": "",
-  "main": "./src/server.ts",
-  "imports": {
-    "#src/*": "./src/*"
-  },
+  "main": "./dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",

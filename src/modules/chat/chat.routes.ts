@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { sendMessage, getChatHistory } from "./chat.controller.ts";
-import ensureVisitorId from "#src/middlewares/visitor.middleware.ts";
+import ensureVisitorId from "../../middlewares/visitor.middleware.ts";
 
 const router = Router();
 

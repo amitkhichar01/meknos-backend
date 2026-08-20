@@ -1,12 +1,8 @@
 import crypto from "node:crypto";
 import type { Request, Response, NextFunction } from "express";
-import { env } from "#src/config/env.config.ts";
+import { env } from "../config/env.config.ts";
 
-export const ensureVisitorId = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const ensureVisitorId = (req: Request, res: Response, next: NextFunction) => {
   let visitorId = req.cookies?.visitor_id;
 
   if (!visitorId) {

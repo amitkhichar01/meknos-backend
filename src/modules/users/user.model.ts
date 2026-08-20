@@ -1,4 +1,4 @@
-import { userStatus, userAuthProvider, userRole } from "#src/modules/users/user.constants.ts";
+import { userStatus, userAuthProvider, userRole } from "../../modules/users/user.constants.ts";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(

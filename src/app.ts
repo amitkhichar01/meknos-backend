@@ -3,8 +3,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import compression from "compression";
 
-import sendResponse from "#src/utils/sendResponse.ts";
-import authRoutes from "#src/modules/auth/auth.routes.ts";
+import sendResponse from "./utils/sendResponse.ts";
+import authRoutes from "./modules/auth/auth.routes.ts";
 import userRoutes from "./modules/users/user.routes.ts";
 import userProfileRoutes from "./modules/userProfile/userProfile.routes.ts";
 import chatRoutes from "./modules/chat/chat.routes.ts";

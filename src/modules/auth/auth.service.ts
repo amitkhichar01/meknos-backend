@@ -1,5 +1,5 @@
 import axios from "axios";
-import { env } from "#src/config/env.config.ts";
+import { env } from "../../config/env.config.ts";
 
 export const verifyGoogleIdToken = async (idToken: string) => {
   const { data } = await axios.get("https://oauth2.googleapis.com/tokeninfo", {

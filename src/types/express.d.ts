@@ -1,4 +1,4 @@
-import type { IUser } from "#src/modules/users/user.types.ts";
+import type { IUser } from "../../modules/users/user.types.ts";
 
 declare global {
   namespace Express {
