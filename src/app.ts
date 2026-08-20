@@ -13,10 +13,6 @@ const app = express();
 
 app.set("trust proxy", 1);
 
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ limit: "50mb", extended: true }));
-app.use(compression());
-app.use(cookieParser());
 app.use(
   cors({
     origin: [
@@ -24,13 +20,18 @@ app.use(
       "http://localhost:3001",
       "http://localhost:5173",
       "http://localhost:5174",
-      "https://meknos.amitkhichar.in"
+      "https://meknos.amitkhichar.in",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
 );
+
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.use(compression());
+app.use(cookieParser());
 
 // health check route
 app.use("/health", (_req: Request, res: Response) => {
@@ -42,10 +43,6 @@ app.use("/auth", authRoutes);
 // app.use("/users", userRoutes);
 app.use("/user-profiles", userProfileRoutes);
 app.use("/public/profiles", chatRoutes);
-
-
-
-
 
 // not found route
 app.use((_req: Request, res: Response) => {
