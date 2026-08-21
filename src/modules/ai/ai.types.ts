@@ -27,4 +27,6 @@ export interface GenerateChatOptions {
   markdownProfile: string;
   question: string;
   history?: ChatHistoryMessage[];
+  aiTone?: string | undefined;
+  useHigherModel?: boolean | undefined;
 }

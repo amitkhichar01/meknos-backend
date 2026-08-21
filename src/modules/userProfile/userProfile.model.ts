@@ -38,6 +38,12 @@ const userProfileSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    aiTone: {
+      type: String,
+      default: "",
+      trim: true,
+    },
   },
   {
     timestamps: true,

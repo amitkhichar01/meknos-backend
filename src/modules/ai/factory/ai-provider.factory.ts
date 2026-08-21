@@ -2,12 +2,12 @@ import { aiConfig } from "../../../config/ai.config.ts";
 import type { AIProvider } from "../providers/ai-provider.interface.ts";
 import { GeminiProvider } from "../providers/gemini.provider.ts";
 
-export const getAIProvider = (): AIProvider => {
+export const getAIProvider = (options?: { useHigherModel?: boolean | undefined }): AIProvider => {
   const provider = aiConfig.provider?.toLowerCase();
 
   switch (provider) {
     case "gemini": {
-      const model = aiConfig.nanoModel;
+      const model = options?.useHigherModel ? aiConfig.nanoModel : aiConfig.nanoModel;
       return new GeminiProvider(model);
     }
 

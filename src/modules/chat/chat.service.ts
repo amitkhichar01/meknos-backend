@@ -2,6 +2,10 @@ import UserProfile from "../../modules/userProfile/userProfile.model.ts";
 import ChatSession from "./chatSession.model.ts";
 import ChatMessage from "./chatMessage.model.ts";
 import { generateChatResponse } from "../../modules/ai/ai.service.ts";
+import {
+  getUserEntitlements,
+  checkMonthlyMessageLimit,
+} from "../billing/entitlement.service.ts";
 import type { IChatHistoryResponse, ISendMessageResponseData } from "./chat.types.ts";
 
 const SESSION_INACTIVITY_LIMIT_MS = 24 * 60 * 60 * 1000; // 24 hours
@@ -64,10 +68,26 @@ export const sendMessageToProfileService = async (params: {
     throw error;
   }
 
-  // 2. Resolve active ChatSession
+  // 2. Check monthly message limit for profile owner
+  const limitCheck = await checkMonthlyMessageLimit(profile.userId, profile._id);
+  if (!limitCheck.allowed) {
+    const error: any = new Error(
+      `Monthly AI message limit reached (${limitCheck.limit} messages/month). Upgrade to Pro for unlimited AI messages.`
+    );
+    error.statusCode = 403;
+    throw error;
+  }
+
+  // 3. Resolve profile owner entitlements
+  const ownerBillingState = await getUserEntitlements(profile.userId);
+  const canUseTone = ownerBillingState.entitlements.features.aiTone === true;
+  const aiToneToUse = canUseTone && profile.aiTone ? profile.aiTone : undefined;
+  const useHigherModel = ownerBillingState.entitlements.features.higherLlmModel === true;
+
+  // 4. Resolve active ChatSession
   const session = await getOrCreateActiveSession(profile._id, visitorId);
 
-  // 3. Save visitor user message
+  // 5. Save visitor user message
   await ChatMessage.create({
     profileId: profile._id,
     sessionId: session._id,
@@ -75,7 +95,7 @@ export const sendMessageToProfileService = async (params: {
     content: messageText,
   });
 
-  // 4. Load recent conversation history (last 10 messages)
+  // 6. Load recent conversation history (last 10 messages)
   const rawHistory = await ChatMessage.find({ sessionId: session._id })
     .sort({ createdAt: -1 })
     .limit(10)
@@ -90,12 +110,14 @@ export const sendMessageToProfileService = async (params: {
       content: msg.content,
     }));
 
-  // 5. Call AI Service for response
+  // 7. Call AI Service for response with entitlement options
   const startTime = Date.now();
   const aiResult = await generateChatResponse({
     markdownProfile: profile.content,
     question: messageText,
     history: historyForAi,
+    aiTone: aiToneToUse,
+    useHigherModel,
   });
   const responseTimeMs = Date.now() - startTime;
 

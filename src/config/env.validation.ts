@@ -5,13 +5,17 @@ export const envSchema = z.object({
 
   PORT: z.coerce.number().int().positive(),
 
+  FRONTEND_URL: z.string().min(1),
+
   MONGODB_URL: z.string().min(1),
+
+  CASHFREE_APP_ID: z.string().min(1),
+  CASHFREE_SECRET_KEY: z.string().min(1),
+  CASHFREE_ENVIRONMENT: z.enum(["SANDBOX", "PRODUCTION"]),
+  CASHFREE_API_VERSION: z.string().min(1),
 
   JWT_SECRET_KEY: z.string().min(32),
   JWT_EXPIRES_IN: z.string().min(1),
-
-  //   RAZORPAY_KEY_ID: z.string().min(1),
-  //   RAZORPAY_KEY_SECRET: z.string().min(1),
 
   GOOGLE_CLIENT_ID: z.string().min(1),
   GOOGLE_CLIENT_SECRET: z.string().min(1),

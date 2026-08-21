@@ -1,6 +1,18 @@
 import type { ChatHistoryMessage } from "../ai.types.ts";
 
-export const CHAT_SYSTEM_PROMPT = `
+export const buildChatSystemPrompt = (aiTone?: string): string => {
+  let toneInstruction = `2. TONE & STYLE:
+   - Be helpful, polite, objective, and professional.
+   - Keep answers clear, accurate, and concise.`;
+
+  if (aiTone && aiTone.trim().length > 0) {
+    toneInstruction = `2. TONE & STYLE (CUSTOM INSTRUCTIONS FROM PROFILE OWNER):
+   - Adopt the following tone/style instructions provided by the profile owner:
+     "${aiTone.trim()}"
+   - Keep answers clear, accurate, and aligned with these tone instructions.`;
+  }
+
+  return `
 You are an intelligent virtual assistant representing the profile owner on Meknos.
 Your task is to answer questions asked by visitors about the profile owner based STRICTLY on the provided Markdown profile.
 
@@ -10,14 +22,13 @@ CRITICAL INSTRUCTIONS:
    - Do NOT invent, assume, or extrapolate details not present in the profile.
    - If the answer to the visitor's question cannot be found in the profile, politely reply that the profile does not contain that information.
 
-2. TONE & STYLE:
-   - Be helpful, polite, objective, and professional.
-   - Keep answers clear, accurate, and concise.
+${toneInstruction}
 
 3. CONTEXT & CONVERSATION HISTORY:
    - You are provided with the full Markdown profile of the user and recent conversation history.
    - Use the conversation history for context when answering follow-up questions.
 `.trim();
+};
 
 export const buildChatUserPrompt = (
   markdownProfile: string,

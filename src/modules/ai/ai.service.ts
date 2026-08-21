@@ -4,7 +4,7 @@ import {
   SUGGESTIONS_SYSTEM_PROMPT,
   buildSuggestionsUserPrompt,
 } from "./prompts/suggestions.prompt.ts";
-import { CHAT_SYSTEM_PROMPT, buildChatUserPrompt } from "./prompts/chat.prompt.ts";
+import { buildChatSystemPrompt, buildChatUserPrompt } from "./prompts/chat.prompt.ts";
 import { DEFAULT_TEMPERATURE, DEFAULT_MAX_TOKENS } from "./ai.constants.ts";
 import type { GenerateTextResult, ChatHistoryMessage, GenerateChatOptions } from "./ai.types.ts";
 
@@ -90,6 +90,8 @@ export const generateChatResponse = async ({
   markdownProfile,
   question,
   history,
+  aiTone,
+  useHigherModel,
 }: GenerateChatOptions): Promise<GenerateTextResult> => {
   if (!markdownProfile || !markdownProfile.trim()) {
     throw new Error("Markdown profile context is required for chat responses.");
@@ -98,9 +100,11 @@ export const generateChatResponse = async ({
     throw new Error("Visitor question is required.");
   }
 
-  const provider = getAIProvider();
+  const provider = getAIProvider({ useHigherModel });
+  const systemPrompt = buildChatSystemPrompt(aiTone);
+
   const result = await provider.generateText({
-    system: CHAT_SYSTEM_PROMPT,
+    system: systemPrompt,
     prompt: buildChatUserPrompt(markdownProfile, question, history),
     temperature: DEFAULT_TEMPERATURE.CHAT,
     maxOutputTokens: DEFAULT_MAX_TOKENS.CHAT,

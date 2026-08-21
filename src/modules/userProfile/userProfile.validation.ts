@@ -9,6 +9,7 @@ export const createUserProfileSchema = z.object({
     .optional()
     .default([]),
   isPublished: z.boolean().optional().default(false),
+  aiTone: z.string().trim().max(1000, "AI tone instructions must not exceed 1000 characters").optional().default(""),
 });
 
 export const updateUserProfileSchema = z
@@ -19,6 +20,7 @@ export const updateUserProfileSchema = z
       .max(5, "You can have a maximum of 5 suggested questions")
       .optional(),
     isPublished: z.boolean().optional(),
+    aiTone: z.string().trim().max(1000, "AI tone instructions must not exceed 1000 characters").optional(),
   })
   .strict();
 
@@ -29,6 +31,7 @@ export const userProfileSchema = z.object({
   content: z.string(),
   suggestedQuestions: z.array(z.string()),
   isPublished: z.boolean(),
+  aiTone: z.string().optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

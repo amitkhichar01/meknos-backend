@@ -8,6 +8,7 @@ import authRoutes from "./modules/auth/auth.routes.ts";
 import userRoutes from "./modules/users/user.routes.ts";
 import userProfileRoutes from "./modules/userProfile/userProfile.routes.ts";
 import chatRoutes from "./modules/chat/chat.routes.ts";
+import billingRoutes from "./modules/billing/billing.routes.ts";
 
 const app = express();
 
@@ -28,7 +29,14 @@ app.use(
   })
 );
 
-app.use(express.json({ limit: "50mb" }));
+app.use(
+  express.json({
+    limit: "50mb",
+    verify: (req: any, _res, buf) => {
+      req.rawBody = buf.toString("utf8");
+    },
+  })
+);
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(compression());
 app.use(cookieParser());
@@ -43,6 +51,7 @@ app.use("/auth", authRoutes);
 // app.use("/users", userRoutes);
 app.use("/user-profiles", userProfileRoutes);
 app.use("/public/profiles", chatRoutes);
+app.use("/billing", billingRoutes);
 
 // not found route
 app.use((_req: Request, res: Response) => {

@@ -19,7 +19,7 @@ export const createProfile = async (req: Request, res: Response) => {
     return sendResponse(res, 400, {}, errorMessage);
   }
 
-  const { content, suggestedQuestions, isPublished } = validation.data;
+  const { content, suggestedQuestions, isPublished, aiTone } = validation.data;
 
   // Check if user already has a profile
   const existingProfile = await UserProfile.findOne({ userId: req.user._id });
@@ -66,6 +66,7 @@ export const createProfile = async (req: Request, res: Response) => {
     content: markdownContent,
     suggestedQuestions: finalQuestions,
     isPublished,
+    aiTone: aiTone || "",
   });
 
   return sendResponse(res, 201, { data: profile }, "User profile created successfully");
@@ -123,7 +124,7 @@ export const updateProfile = async (req: Request, res: Response) => {
     return sendResponse(res, 404, {}, "User profile not found");
   }
 
-  const { content, suggestedQuestions, isPublished } = validation.data;
+  const { content, suggestedQuestions, isPublished, aiTone } = validation.data;
 
   // If content changed, re-generate Markdown via AI
   if (content !== undefined) {
@@ -142,6 +143,10 @@ export const updateProfile = async (req: Request, res: Response) => {
 
   if (isPublished !== undefined) {
     profile.isPublished = isPublished;
+  }
+
+  if (aiTone !== undefined) {
+    profile.aiTone = aiTone;
   }
 
   await profile.save();
