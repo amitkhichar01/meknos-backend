@@ -7,6 +7,7 @@ import {
   generateProfileMarkdown,
   generateSuggestedQuestions,
 } from "../../modules/ai/ai.service.ts";
+import { getUserEntitlements } from "../billing/entitlement.service.ts";
 
 export const createProfile = async (req: Request, res: Response) => {
   if (!req.user) {
@@ -106,6 +107,35 @@ export const getPublicProfile = async (req: Request, res: Response) => {
   }
 
   return sendResponse(res, 200, { data: profile }, "Public profile fetched successfully");
+};
+
+export const getPublicProfileConfig = async (req: Request, res: Response) => {
+  const { username } = req.params;
+
+  if (!username) {
+    return sendResponse(res, 400, {}, "Username parameter is required");
+  }
+
+  const profile = await UserProfile.findOne({
+    username: username,
+    isPublished: true,
+  })
+    .select("userId")
+    .lean();
+
+  if (!profile) {
+    return sendResponse(res, 404, {}, "User profile not found");
+  }
+
+  const billingState = await getUserEntitlements(profile.userId);
+  const removeBranding = billingState.entitlements.features.removeBranding === true;
+
+  return sendResponse(
+    res,
+    200,
+    { data: { removeBranding } },
+    "Profile branding status retrieved successfully"
+  );
 };
 
 export const updateProfile = async (req: Request, res: Response) => {

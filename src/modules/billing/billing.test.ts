@@ -253,7 +253,7 @@ const runTests = async () => {
     const user1Payments = await getUserPaymentHistoryService(testUserId1);
     const user2Payments = await getUserPaymentHistoryService(testUserId2);
     console.assert(
-      user1Payments.length === 1 && user1Payments[0].orderId === payment1.orderId,
+      user1Payments.length === 1 && user1Payments[0]?.orderId === payment1.orderId,
       "Test 22 Failed: User 1 payments isolated"
     );
     console.assert(user2Payments.length === 0, "Test 22 Failed: User 2 has no payments");
@@ -261,11 +261,11 @@ const runTests = async () => {
     const user1Subs = await getUserSubscriptionHistoryService(testUserId1);
     const user2Subs = await getUserSubscriptionHistoryService(testUserId2);
     console.assert(
-      user1Subs.length === 1 && user1Subs[0]._id.toString() === activeSub._id.toString(),
+      user1Subs.length === 1 && user1Subs[0]?._id.toString() === activeSub._id.toString(),
       "Test 23 Failed: User 1 subscription history isolated"
     );
     console.assert(
-      user2Subs.length === 1 && user2Subs[0]._id.toString() === expiredSub._id.toString(),
+      user2Subs.length === 1 && user2Subs[0]?._id.toString() === expiredSub._id.toString(),
       "Test 23 Failed: User 2 subscription history isolated"
     );
     console.log("✅ Test 22-23 Passed: Payment & Subscription history API is user-isolated.");
